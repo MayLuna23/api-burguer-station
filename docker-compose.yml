@@ -1,0 +1,32 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: securepass
+      MYSQL_DATABASE: development
+      MYSQL_USER: may
+      MYSQL_PASSWORD: may123
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d 
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: may
+      PMA_PASSWORD: may123
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+
+volumes:
+  db_data:
