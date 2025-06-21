@@ -25,7 +25,7 @@ model Product {
   product_id Int      @id @default(autoincrement())
   name       String   @db.VarChar(100)
   price      Float
-  description String  @db.VarChar(225)
+  description String?  @db.VarChar(225)
   categoryId Int      // FK explícita
   category   Category @relation(fields: [categoryId], references: [category_id], onDelete: Restrict)
 }

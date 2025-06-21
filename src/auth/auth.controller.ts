@@ -1,14 +1,47 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpException,
+  HttpStatus,
+  HttpCode,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LoginUserDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() loginData: { email: string; password: string }) {
-    const jwt = await this.authService.validateUser(loginData.email, loginData.password);
-    if (!jwt) throw new UnauthorizedException('Email or password is incorrect');
-    return jwt;
+  @HttpCode(HttpStatus.OK)
+  async login(@Body() loginData: LoginUserDto) {
+    const data = await this.authService.validateUser(
+      loginData.email,
+      loginData.password,
+    );
+
+    if (!data.jwtToken) {
+      throw new HttpException(
+        {
+          statusCode: 401,
+          message: 'Correo electrónico o contraseña incorrectos',
+          data: {
+            userName: null,
+            jwt: null,
+          },
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    return {
+      statusCode: 200,
+      message: 'Login exitoso',
+      data: {
+        userName: data.userName,
+        jwt: data.jwtToken,
+      },
+    };
   }
 }

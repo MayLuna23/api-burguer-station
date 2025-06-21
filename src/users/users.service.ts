@@ -6,7 +6,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma.service';
 import { getFormattedDateTime } from 'src/common/utils/date-time.util';
 import { Cache } from 'cache-manager';
@@ -69,7 +68,7 @@ export class UsersService {
         this.logger.warn(
           `[UsersService][${method}] No user found with email ${email}`,
         );
-        throw new NotFoundException(`User with email ${email} not found`);
+        return null;
       }
 
       this.logger.log(

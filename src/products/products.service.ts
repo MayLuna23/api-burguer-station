@@ -1,13 +1,71 @@
-import { Injectable } from '@nestjs/common';
-
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from 'src/prisma.service';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ProductsService {
-  findAll() {
-    return `This action returns all products`;
+  private readonly logger = new Logger(ProductsService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject('CACHE_MANAGER') private readonly cacheManager: Cache,
+  ) {}
+
+  async findAll() {
+    const method = 'findAll';
+    this.logger.log(`[ProductsService][${method}] Retrieving all products`);
+
+    try {
+      const products = await this.prisma.product.findMany();
+
+      this.logger.log(
+        `[ProductsService][${method}] Found ${products.length} products`,
+      );
+
+      return products;
+    } catch (error) {
+      this.logger.error(
+        `[ProductsService][${method}] Error retrieving products: ${error.message}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException('Error retrieving products');
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    const method = 'findOne';
+    this.logger.log(
+      `[ProductsService][${method}] Searching for product with id ${id}`,
+    );
+
+    try {
+      const product = await this.prisma.product.findUnique({
+        where: { product_id: id }, // Asegúrate de que esta sea la columna correcta
+      });
+
+      if (!product) {
+        this.logger.warn(
+          `[ProductsService][${method}] No product found with id ${id}`,
+        );
+        throw new NotFoundException(`Product with id ${id} not found`);
+      }
+
+      this.logger.log(
+        `[ProductsService][${method}] Found product with id ${id}`,
+      );
+      return product;
+    } catch (error) {
+      this.logger.error(
+        `[ProductsService][${method}] Error retrieving product: ${error.message}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException('Error retrieving product');
+    }
   }
 }

@@ -7,12 +7,7 @@ import {
   Matches,
 } from 'class-validator';
 
-export class CreateUserDto {
-  @IsString()
-  @IsNotEmpty()
-  @Length(3, 50)
-  name: string;
-
+export class LoginUserDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
