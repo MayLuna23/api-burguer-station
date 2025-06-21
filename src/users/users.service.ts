@@ -37,7 +37,7 @@ export class UsersService {
         );
         return {
           statusCode: 409,
-          message: `Usuario con correo electronico ${newUserData.email} ya existe`,
+          message: `Emal ya registrado`,
           data: null,
         }
       }

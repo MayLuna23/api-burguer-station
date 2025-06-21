@@ -8,7 +8,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger(winstonLoggerOptions), // Uso de logger en toda la AP
   });
+
+  app.enableCors({
+    origin: ['http://localhost:5173'], // o tu dominio frontend
+    methods: ['GET', 'POST'],
+    credentials: true, // si usas cookies o tokens con credenciales
+  });
+  
   app.useGlobalPipes(new ValidationPipe({ whitelist: true })); // Validación global de DTOs
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
