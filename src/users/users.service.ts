@@ -29,6 +29,19 @@ export class UsersService {
     try {
       const hashedPassword = await bcrypt.hash(newUserData.password, 10);
 
+      // Verificar si el usuario ya existe por email
+      const existingUser = await this.findByEmail(newUserData.email);
+      if (existingUser) {
+        this.logger.warn(
+          `[UsersService][${method}] User with email ${newUserData.email} already exists`,
+        );
+        return {
+          statusCode: 409,
+          message: `Usuario con correo electronico ${newUserData.email} ya existe`,
+          data: null,
+        }
+      }
+      
       const user = await this.prisma.user.create({
         data: {
           ...newUserData,
@@ -36,14 +49,18 @@ export class UsersService {
           register: getFormattedDateTime(),
         },
       });
-
+      
       this.logger.log(
         `[UsersService][${method}] User created with id ${user.id}`,
       );
 
       // Excluir password al retornar
       const { password, ...result } = user;
-      return result;
+      return {
+        statusCode: 201,
+        message: 'Usuario creado exitosamente',
+        data: result,
+      };
     } catch (error) {
       this.logger.error(
         `[UsersService][${method}] Error creating user: ${error.message}`,
