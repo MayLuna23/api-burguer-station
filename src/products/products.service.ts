@@ -5,8 +5,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '@/prisma.service';
 import { Cache } from 'cache-manager';
+import { ProductDto } from './dto/product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -39,6 +40,7 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
+    console.log(id);
     const method = 'findOne';
     this.logger.log(
       `[ProductsService][${method}] Searching for product with id ${id}`,
@@ -46,14 +48,15 @@ export class ProductsService {
 
     try {
       const product = await this.prisma.product.findUnique({
-        where: { product_id: id }, // Asegúrate de que esta sea la columna correcta
+        where: { product_id: id },
       });
 
       if (!product) {
         this.logger.warn(
           `[ProductsService][${method}] No product found with id ${id}`,
         );
-        throw new NotFoundException(`Product with id ${id} not found`);
+        return product
+        // throw new NotFoundException(`Product with id ${id} not found`);
       }
 
       this.logger.log(

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as sgMail from '@sendgrid/mail';
 import * as dotenv from 'dotenv';
 
@@ -8,7 +8,7 @@ const SENDGRID_API_KEY: string = process.env.SENDGRID_API_KEY!;
 type Extras = {
   name: string;
   price: number;
-}
+};
 
 type ProductsSold = {
   name: string;
@@ -29,15 +29,16 @@ export class EmailService {
     total: number;
     products: ProductsSold[];
   }): Promise<{ statusCode: number; message: string; data: any }> {
+
     if (!SENDGRID_API_KEY) {
       throw new Error('Falta la variable de entorno SENDGRID_API_KEY');
     }
 
-const msg = {
-  to: data.email,
-  from: 'theburguerstation.dev@gmail.com',
-  subject: 'The Burger Station: Confirmación de compra',
-  html: `
+    const msg = {
+      to: data.email,
+      from: 'theburguerstation.dev@gmail.com',
+      subject: 'The Burger Station: Confirmación de compra',
+      html: `
   <div style="max-width:600px; margin:0 auto; padding:20px; font-family:sans-serif; background:#fff;">
     <h1 style="text-align:center; margin-bottom:8px;">🍔 The Burger Station 🚂</h1>
     <h2 style="text-align:center; margin-top:0; color:#222;">Factura de compra</h2>
@@ -65,7 +66,7 @@ const msg = {
                 <td style="padding-left:16px;">${extra.name}</td>
                 <td style="text-align:right;">($${extra.price.toFixed(2)})</td>
               </tr>
-            `
+            `,
               )
               .join('')}
           </table>
@@ -76,7 +77,7 @@ const msg = {
         <p style="margin:4px 0;">Cantidad: ${product.quantity}</p>
         <p style="font-size: 24px; margin:4px 0; text-align:right; font-weight:bold; color:#f97316;">Total: $${product.totalPrice.toFixed(2)}</p>
       </div>
-    `
+    `,
       )
       .join('')}
 
@@ -86,10 +87,8 @@ const msg = {
       Total pagado: $${data.total.toFixed(2)}
     </h2>
   </div>
-  `
-};
-
-
+  `,
+    };
 
     try {
       const response = await sgMail.send(msg);
@@ -105,7 +104,7 @@ const msg = {
         'Error al enviar correo:',
         error.response?.body || error.message,
       );
-      throw new Error('No se pudo enviar el correo');
+      throw new InternalServerErrorException('No se pudo enviar el correo');
     }
   }
 }

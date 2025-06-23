@@ -6,8 +6,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { PrismaService } from 'src/prisma.service';
-import { getFormattedDateTime } from 'src/common/utils/date-time.util';
+import { PrismaService } from '@/prisma.service';
+import { getFormattedDateTime } from '@/common/utils/date-time.util';
 import { Cache } from 'cache-manager';
 import * as bcrypt from 'bcrypt';
 
@@ -35,11 +35,7 @@ export class UsersService {
         this.logger.warn(
           `[UsersService][${method}] User with email ${newUserData.email} already exists`,
         );
-        return {
-          statusCode: 409,
-          message: `Emal ya registrado`,
-          data: null,
-        }
+        return null
       }
       
       const user = await this.prisma.user.create({

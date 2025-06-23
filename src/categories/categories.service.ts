@@ -5,7 +5,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '@/prisma.service';
 import { Cache } from 'cache-manager';
 
 @Injectable()
@@ -60,7 +60,7 @@ export class CategoriesService {
         this.logger.warn(
           `[CategoriesService][${method}] No category found with id ${id}`,
         );
-        throw new NotFoundException(`Category with id ${id} not found`);
+        return category;
       }
 
       this.logger.log(
