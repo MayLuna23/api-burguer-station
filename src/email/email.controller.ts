@@ -19,7 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ApiResponseDto } from '@/types/api-response.dto';
-import { successResponse } from '@/common/helpers/response.helper'; // 👈 asegúrate de tener esto bien importado
+import { successResponse } from '@/common/helpers/response.helper';
 
 @ApiTags('Email')
 @ApiBearerAuth()
@@ -32,19 +32,53 @@ export class EmailController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Enviar confirmación de compra por correo electrónico',
+    description:
+      'Este endpoint envía un correo al cliente con el resumen detallado de su compra.',
   })
   @ApiBody({
     type: EmailSendDto,
+    examples: {
+      example1: {
+        summary: 'Compra válida',
+        value: {
+          total: 13.5,
+          products: [
+            {
+              name: 'La Montañesa',
+              price: 6.0,
+              quantity: 2,
+              totalPrice: 12.0,
+              extras: [
+                { name: 'Queso cheddar', price: 0.5 },
+                { name: 'Huevo frito', price: 1.0 },
+              ],
+            },
+          ],
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 200,
     description: 'Correo enviado correctamente',
-    type: ApiResponseDto,
+    schema: {
+      example: {
+        statusCode: 200,
+        message: 'Correo enviado correctamente',
+        data: null,
+      },
+    },
   })
   @ApiResponse({
     status: 500,
     description: 'Error interno al enviar el correo',
-    type: ApiResponseDto,
+    schema: {
+      example: {
+        statusCode: 500,
+        message: 'No se pudo enviar el correo',
+        errors: 'Información detallada del error',
+      },
+    },
   })
   async sendEmail(
     @Req()
