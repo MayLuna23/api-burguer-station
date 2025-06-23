@@ -3813,3 +3813,38 @@
 [2025-06-23T21:04:20.548Z] [INFO]: Database connection established successfully
 [2025-06-23T21:04:20.558Z] [INFO]: Database connection established successfully
 [2025-06-23T21:04:20.561Z] [INFO]: Nest application successfully started
+[2025-06-23T21:04:59.382Z] [INFO]: Starting Nest application...
+[2025-06-23T21:04:59.400Z] [INFO]: PrismaService initialized with DB URL: mysql://may:may123@localhost:3306/development
+[2025-06-23T21:04:59.403Z] [INFO]: PrismaService initialized with DB URL: mysql://may:may123@localhost:3306/development
+[2025-06-23T21:04:59.406Z] [INFO]: PrismaService initialized with DB URL: mysql://may:may123@localhost:3306/development
+[2025-06-23T21:04:59.416Z] [INFO]: JwtModule dependencies initialized
+[2025-06-23T21:04:59.418Z] [INFO]: ConfigHostModule dependencies initialized
+[2025-06-23T21:04:59.419Z] [INFO]: CacheModule dependencies initialized
+[2025-06-23T21:04:59.420Z] [INFO]: CacheModule dependencies initialized
+[2025-06-23T21:04:59.420Z] [INFO]: CacheModule dependencies initialized
+[2025-06-23T21:04:59.421Z] [INFO]: CacheModule dependencies initialized
+[2025-06-23T21:04:59.422Z] [INFO]: ConfigModule dependencies initialized
+[2025-06-23T21:04:59.422Z] [INFO]: UsersModule dependencies initialized
+[2025-06-23T21:04:59.423Z] [INFO]: EmailModule dependencies initialized
+[2025-06-23T21:04:59.423Z] [INFO]: AppModule dependencies initialized
+[2025-06-23T21:04:59.423Z] [INFO]: AuthModule dependencies initialized
+[2025-06-23T21:04:59.424Z] [INFO]: ProductsModule dependencies initialized
+[2025-06-23T21:04:59.424Z] [INFO]: CategoriesModule dependencies initialized
+[2025-06-23T21:04:59.447Z] [INFO]: EmailController {/email}:
+[2025-06-23T21:04:59.450Z] [INFO]: Mapped {/email/send, POST} route
+[2025-06-23T21:04:59.450Z] [INFO]: UsersController {/users}:
+[2025-06-23T21:04:59.451Z] [INFO]: Mapped {/users, POST} route
+[2025-06-23T21:04:59.451Z] [INFO]: AuthController {/auth}:
+[2025-06-23T21:04:59.452Z] [INFO]: Mapped {/auth/login, POST} route
+[2025-06-23T21:04:59.453Z] [INFO]: ProductsController {/products}:
+[2025-06-23T21:04:59.454Z] [INFO]: Mapped {/products, GET} route
+[2025-06-23T21:04:59.455Z] [INFO]: Mapped {/products/:id, GET} route
+[2025-06-23T21:04:59.456Z] [INFO]: CategoriesController {/categories}:
+[2025-06-23T21:04:59.456Z] [INFO]: Mapped {/categories, GET} route
+[2025-06-23T21:04:59.457Z] [INFO]: Mapped {/categories/:id, GET} route
+[2025-06-23T21:04:59.457Z] [INFO]: EmailController {/email}:
+[2025-06-23T21:04:59.457Z] [INFO]: Mapped {/email/send, POST} route
+[2025-06-23T21:04:59.474Z] [INFO]: Database connection established successfully
+[2025-06-23T21:04:59.483Z] [INFO]: Database connection established successfully
+[2025-06-23T21:04:59.492Z] [INFO]: Database connection established successfully
+[2025-06-23T21:04:59.494Z] [INFO]: Nest application successfully started
