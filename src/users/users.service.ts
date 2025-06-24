@@ -17,54 +17,64 @@ export class UsersService {
 
   constructor(
     private prisma: PrismaService,
-    @Inject('CACHE_MANAGER') private cacheManager: Cache, // Inyectar el servicio de caché
+    @Inject('CACHE_MANAGER') private cacheManager: Cache,
   ) {}
 
-  async create(newUserData: CreateUserDto) {
-    const method = 'create';
-    this.logger.log(
-      `[UsersService][${method}] Creating new user: ${JSON.stringify({ ...newUserData, password: '***' })}`,
-    );
+async create(newUserData: CreateUserDto) {
+  const method = 'create';
+  this.logger.log(
+    `[UsersService][${method}] Creating new user: ${JSON.stringify({
+      ...newUserData,
+      password: '***',
+    })}`,
+  );
 
-    try {
-      const hashedPassword = await bcrypt.hash(newUserData.password, 10);
-
-      // Verificar si el usuario ya existe por email
-      const existingUser = await this.findByEmail(newUserData.email);
-      if (existingUser) {
-        this.logger.warn(
-          `[UsersService][${method}] User with email ${newUserData.email} already exists`,
-        );
-        return null
-      }
-      
-      const user = await this.prisma.user.create({
-        data: {
-          ...newUserData,
-          password: hashedPassword,
-          register: getFormattedDateTime(),
-        },
-      });
-      
-      this.logger.log(
-        `[UsersService][${method}] User created with id ${user.id}`,
+  try {
+    const existingUser = await this.checkIfUserExists(newUserData.email);
+    if (existingUser) {
+      this.logger.warn(
+        `[UsersService][${method}] User with email ${newUserData.email} already exists`,
       );
-
-      // Excluir password al retornar
-      const { password, ...result } = user;
-      return {
-        statusCode: 201,
-        message: 'Usuario creado exitosamente',
-        data: result,
-      };
-    } catch (error) {
-      this.logger.error(
-        `[UsersService][${method}] Error creating user: ${error.message}`,
-        error.stack,
-      );
-      throw new InternalServerErrorException('Error creating user');
+      return null;
     }
+
+    const hashedPassword = await this.hashPassword(newUserData.password);
+
+    const user = await this.prisma.user.create({
+      data: {
+        ...newUserData,
+        password: hashedPassword,
+        register: getFormattedDateTime(),
+      },
+    });
+
+    this.logger.log(`[UsersService][${method}] User created with id ${user.id}`);
+
+    const { password, ...result } = user;
+    return {
+      statusCode: 201,
+      message: 'Usuario creado exitosamente',
+      data: result,
+    };
+  } catch (error) {
+    this.logger.error(
+      `[UsersService][${method}] Error creating user: ${error.message}`,
+      error.stack,
+    );
+    throw new InternalServerErrorException('Error creating user');
   }
+}
+
+private async hashPassword(password: string): Promise<string> {
+  return await bcrypt.hash(password, 10);
+}
+
+private async checkIfUserExists(email: string): Promise<boolean> {
+  const user = await this.findByEmail(email);
+  return !!user;
+}
+
+
 
   async findByEmail(email: string) {
     const method = 'findByEmail';

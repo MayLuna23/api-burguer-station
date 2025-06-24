@@ -5,6 +5,8 @@ import {
   HttpCode,
   HttpStatus,
   UnauthorizedException,
+  UseGuards,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
@@ -16,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { LoginResponseDto } from './dto/login-response.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -81,4 +84,11 @@ export class AuthController {
       200,
     );
   }
+
+  @Get('verify')
+  @UseGuards(AuthGuard('jwt'))
+  verifyToken() {
+    return true
+  }
+  
 }
