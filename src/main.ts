@@ -19,12 +19,12 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const config = new DocumentBuilder()
-    .setTitle('API de Hamburguesas 🍔')
+    .setTitle('API Burguer Station 🍔')
     .setDescription(
       'Esta API permite gestionar la venta de hamburguesas, el registro de usuarios y el envío de confirmaciones de compra por correo electrónico.',
     )
     .setVersion('1.0')
-    .addBearerAuth() // Para proteger rutas con JWT desde Swagger
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

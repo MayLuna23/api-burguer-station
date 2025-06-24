@@ -11,7 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
 import { successResponse } from '@/common/helpers/response.helper';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -82,8 +82,15 @@ export class AuthController {
 
   @Get('verify')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Verifica si el token JWT es válido' })
+  @ApiResponse({ status: 200, description: 'Token válido' })
+  @ApiResponse({
+    status: 401,
+    description: 'Token inválido o no proporcionado',
+  })
   verifyToken() {
-    return true
+    return successResponse({data: true}, 'Token verificado exitosamente', 200 )
+
   }
-  
 }

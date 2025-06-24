@@ -23,10 +23,10 @@ export class EmailService {
   private readonly logger = new Logger(EmailService.name);
 
   constructor() {
-    if (!SENDGRID_API_KEY) {
-      this.logger.error('[EmailService][constructor] SENDGRID_API_KEY is missing in environment');
-      throw new Error('Falta la variable de entorno SENDGRID_API_KEY');
-    }
+    // if (!SENDGRID_API_KEY) {
+    //   this.logger.error('[EmailService][constructor] SENDGRID_API_KEY is missing in environment');
+    //   throw new Error('Falta la variable de entorno SENDGRID_API_KEY');
+    // }
     sgMail.setApiKey(SENDGRID_API_KEY);
   }
 
