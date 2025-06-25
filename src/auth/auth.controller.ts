@@ -11,12 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
 import { successResponse } from '@/common/helpers/response.helper';
-import {
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -42,20 +37,20 @@ export class AuthController {
     description: 'Login exitoso',
     type: LoginResponseDto,
   })
-@ApiResponse({
-  status: 401,
-  description: 'Credenciales incorrectas',
-  schema: {
-    example: {
-      statusCode: 401,
-      message: 'Correo electrónico o contraseña incorrectos',
-      data: {
-        userName: null,
-        jwt: null,
+  @ApiResponse({
+    status: 401,
+    description: 'Credenciales incorrectas',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Correo electrónico o contraseña incorrectos',
+        data: {
+          userName: null,
+          jwt: null,
+        },
       },
     },
-  },
-})
+  })
   async login(@Body() loginData: LoginUserDto) {
     const data = await this.authService.validateUser(
       loginData.email,

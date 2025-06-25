@@ -10,7 +10,14 @@ import { EmailService } from './email/email.service';
 import { EmailModule } from './email/email.module';
 
 @Module({
-  imports: [CacheModule.register(), UsersModule, AuthModule, ProductsModule, CategoriesModule, EmailModule],
+  imports: [
+    CacheModule.register(),
+    UsersModule,
+    AuthModule,
+    ProductsModule,
+    CategoriesModule,
+    EmailModule,
+  ],
   controllers: [EmailController],
   providers: [EmailService],
 })
